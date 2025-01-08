@@ -47,3 +47,5 @@ po/*~
 
 # RStudio Connect folder
 rsconnect/
+R/Data_cleaning.R
+.DS_Store
