@@ -1,3 +1,13 @@
+################################################################################
+#MAIN
+################################################################################
+#1. First order false-belief
+#Descriptive
+describe(tom$Age)
+table(tom$Gender)
+
+##Model building
+
 #Nullmodel
 tom0 <- glm(ToM ~ 1, data= tom, family= "binomial")
 #First modell
@@ -16,8 +26,75 @@ tom1.1_c <-  glm(ToM ~ Age+ grouping_new, data= tom_c, family= "binomial")
 #Adding device usage 
 tom1.1.2 <- glm(ToM ~ Age+ grouping_new+Device_min_per_day, data= tom_c, family= "binomial")
 anova(tom1.1_c, tom1.1.2, test= "LRT")
+################################################################################
+#2. Second-order false-belief
+
+##Descriptive 
+describe(tom2nd_filtered$Age)
+table(tom2nd_filtered$Gender)
+
+##Model building
+#Nullmodel
+tom2nd_0 <- glm(ToM_2nd ~ 1, data=tom2nd_filtered, family= "binomial")
+
+#Adding Age
+tom2nd_1 <- glm(ToM_2nd ~ Age, data=tom2nd_filtered, family= "binomial")
+
+anova(tom2nd_0,tom2nd_1, test= "LRT")
+CIbinm2(tom2nd_1)
+summary(tom2nd_1)
+
+#Adding grouping
+tom2nd_1.1 <- glm(ToM_2nd ~ Age+ grouping_new, data=tom2nd_filtered, family= "binomial")
+#Comparing the change between the model only with Age, and the model with grouping
+anova(tom2nd_1,tom2nd_1.1, test= "LRT")
+
+emmeans(tom2nd_1.1, list(pairwise ~ grouping_new), type= "response")
+summary(tom2nd_1.1)
+
+#Cleaning the data to be comparable the two models
+tom2nd_filtered_cleaned <- na.omit(tom2nd_filtered)
+
+tom2nd_1.2 <- glm(ToM_2nd ~ Age+ grouping_new, data=tom2nd_filtered_cleaned, family= "binomial")
+#Adding device use
+tom2nd_1.1.1 <- glm(ToM_2nd ~ Age+ grouping_new+ Device_min_per_day, data=tom2nd_filtered_cleaned, family= "binomial")
+
+anova(tom2nd_1.2, tom2nd_1.1.1, test= "LRT")
+################################################################################
+#3. Real-Apparent Emotions
+
+#Descriptivee
+describe(appenreal$Age)
+
+table(appenreal$Gender)
+table(appenreal$grouping_new)
+
+##Model building
+#nullmodel
+appen_0 <- glm(Appen_r_a ~ 1, data= appenreal, family= "binomial")
+#Effect of Age on the Real-Apparent emotion task
+appen_1 <- glm(Appen_r_a ~ Age, data= appenreal, family= "binomial")
+
+anova(appen_0, appen_1, test= "LRT")
+
+#The real apparent emotion ndevelopment was not realted to Age, I removed it from the model
+appen_2 <- glm(Appen_r_a ~ grouping_new, data= appenreal, family= "binomial")
+anova(appen_0, appen_2, test= "LRT")
+emmeans(appen_2, list(pairwise ~ grouping_new), type= "response")
+
+#Cleaning the data from missing values in Device_mnin_per_day
+appen_c <- na.omit(appenreal)
+appen_2_c <- glm(Appen_r_a ~ grouping_new, data= appen_c, family= "binomial")
+appen_2.1_c <- glm(Appen_r_a ~ grouping_new+Device_min_per_day, data= appen_c, family= "binomial")
+anova(appen_2_c, appen_2.1_c, test="LRT")
 
 
+################################################################################
+#Appendix
+################################################################################
+
+################################################################################
+#First order false belief
 
 #Creating a dataset for pre-Covid
 Pre_Covid <- tom %>%
@@ -52,14 +129,15 @@ summary(model_dc)
 
 
 
-
-
 CIbinm2(model_dc)
 
 #post-Covid model
 model_0_ac <-glm(ToM ~ 1 , data= After_Covid, family="binomial")
 model_ac <- glm(ToM ~ Age, data=After_Covid, family= "binomial")
 anova(model_0_ac, model_ac, test="LRT")
+
+################################################################################
+#Age difference Across groups
 
 #Normalioty test
 by(tom$Age, tom$grouping_new, function(x){shapiro.test(x)})
@@ -82,45 +160,12 @@ post_hoc_bon <- lincon(Age ~grouping_new, data = tom,method = "bonferroni")
 print(post_hoc_bon)
 
 
-
 # Classification tree
 tree <- rpart(ToM ~ Age, data=tom, method= "class")
 
+
 ################################################################################
-#Second-order Theory of Mind task
-################################################################################
-
-
-#Nullmodel
-tom2nd_0 <- glm(ToM_2nd ~ 1, data=tom2nd_filtered, family= "binomial")
-
-#Adding Age
-tom2nd_1 <- glm(ToM_2nd ~ Age, data=tom2nd_filtered, family= "binomial")
-
-anova(tom2nd_0,tom2nd_1, test= "LRT")
-CIbinm2(tom2nd_1)
-summary(tom2nd_1)
-
-#Adding grouping
-tom2nd_1.1 <- glm(ToM_2nd ~ Age+ grouping_new, data=tom2nd_filtered, family= "binomial")
-#Comparing the change between the model only with Age, and the model with grouping
-anova(tom2nd_1,tom2nd_1.1, test= "LRT")
-
-emmeans(tom2nd_1.1, list(pairwise ~ grouping_new), type= "response")
-summary(tom2nd_1.1)
-
-#Cleaning the data to be comparable the two models
-tom2nd_filtered_cleaned <- na.omit(tom2nd_filtered)
-
-tom2nd_1.2 <- glm(ToM_2nd ~ Age+ grouping_new, data=tom2nd_filtered_cleaned, family= "binomial")
-#Adding device use
-tom2nd_1.1.1 <- glm(ToM_2nd ~ Age+ grouping_new+ Device_min_per_day, data=tom2nd_filtered_cleaned, family= "binomial")
-
-anova(tom2nd_1.2, tom2nd_1.1.1, test= "LRT")
-
-
-
-
+#Second-order fals-belief
 
 #How Age and grouping related
 age_0 <- lm(Age ~1, data= tom2nd_filtered)
@@ -133,9 +178,7 @@ anova(age_0, age_lm, test= "LRT")
 summary(age_lm)
 
 
-
-
-
+#Age across groups
 
 #Creating a dataset for Covid
 During_Covid_2 <- tom2nd %>%
@@ -174,38 +217,6 @@ CIbinm2(model_ac)
 
 ######################################################################################
 #Real-Apparent Emotions
-######################################################################################
-################################################################################
-#Descriptive statistics
-################################################################################
-max(appenreal$Test_date)
-
-psych::describe(appenreal$Device_min_per_day)
-describeBy(appenreal$Device_min_per_day, group= appenreal$grouping_new)
-psych::describe(appenreal$Age)
-table(appenreal$Gender)
-table(appenreal$grouping_new)
-describeBy(appenreal$Age, group= appenreal$grouping_new)
-################################################################################
-#Analysis
-################################################################################
-#nullmodel
-appen_0 <- glm(Appen_r_a ~ 1, data= appenreal, family= "binomial")
-#Effect of Age on the Real-Apparent emotion task
-appen_1 <- glm(Appen_r_a ~ Age, data= appenreal, family= "binomial")
-
-anova(appen_0, appen_1, test= "LRT")
-
-#The real apparent emotion ndevelopment was not realted to Age, I removed it from the model
-appen_2 <- glm(Appen_r_a ~ grouping_new, data= appenreal, family= "binomial")
-anova(appen_0, appen_2, test= "LRT")
-emmeans(appen_2, list(pairwise ~ grouping_new), type= "response")
-
-#Cleaning the data, to be even the sample size in the two models
-appen_c <- na.omit(appenreal)
-appen_2_c <- glm(Appen_r_a ~ grouping_new, data= appen_c, family= "binomial")
-appen_2.1_c <- glm(Appen_r_a ~ grouping_new+Device_min_per_day, data= appen_c, family= "binomial")
-anova(appen_2_c, appen_2.1_c, test="LRT")
 
 
 #Normality test
@@ -224,17 +235,5 @@ print(wrs2)
 post_hoc_bon <- lincon(Age ~grouping_new, data = appenreal,method = "bonferroni")
 
 print(post_hoc_bon)
-
-
-################################################################################
-#Appenreal-emotions
-################################################################################
-
-#The emotion recognition contained missing data, a cleaned dataset was created to be even the sample sizes across the models 
-appen_emo_c <-  na.omit(appen_emo)
-
-#is emotion recognition development predicting Real-Apparent Emotion recognition development? 
-model_appenemo_0 <- glm(Appen_r_a ~ 1, data= appen_emo_c, family= "binomial")
-model_appenemo_1 <- glm(Appen_r_a ~ Emo_recog_per, data= appen_emo_c, family= "binomial")
 
 
