@@ -21,8 +21,7 @@ ggplot(tom, aes(x = grouping_new, y = ToM, fill= grouping_new)) +
         panel.background = element_rect(fill="#FCEEE5"),
         plot.background = element_rect(fill="#FCEEE5"),
         axis.text.x = element_text(color="black", size = 16),
-        axis.text.y = element_text(color="black", size = 18),
-        axis.text = element_text(color="black", size= 16),
+        axis.text.y = element_text(color="black", size = 14),
         axis.title = element_text(color = "black", size = 18))
 
 
@@ -45,10 +44,9 @@ ggplot(tom2nd_filtered, aes(x = grouping_new, y = ToM_2nd, fill= grouping_new)) 
         axis.line = element_line(),
         panel.background = element_rect(fill="#FCEEE5"),
         plot.background = element_rect(fill="#FCEEE5"),,
-        axis.text.x = element_text(color="black", size = 14),
-        axis.text.y = element_text(color="black", size = 16),
-        axis.text = element_text(color="black", size= 14),
-        axis.title = element_text(color = "black", size = 16))
+        axis.text.x = element_text(color="black", size = 16),
+        axis.text.y = element_text(color="black", size = 14),
+        axis.title = element_text(color = "black", size = 18))
 ###############################################################################
 #Real-Apparent Emotions
 
@@ -67,10 +65,9 @@ ggplot(appenreal, aes(x = grouping_new, y = Appen_r_a, fill= grouping_new)) +
         axis.line = element_line(),
         panel.background = element_rect(fill="#FCEEE5"),
         plot.background = element_rect(fill="#FCEEE5"),
-        axis.text.x = element_text(color="black", size = 14),
-        axis.text.y = element_text(color="black", size = 16),
-        axis.text = element_text(color="black"),
-        axis.title = element_text(color = "black", size = 16))
+        axis.text.x = element_text(color="black", size = 16),
+        axis.text.y = element_text(color="black", size = 14),
+        axis.title = element_text(color = "black", size = 18))
 
 
 
@@ -143,8 +140,6 @@ rpart.plot(tree)
 ################################################################################
 #ToM2nd
 
-
-
 #Age and ToM2nd accross groups
 ggplot(tom2nd_filtered, aes(x=Age,
                             y= ToM_2nd))+
@@ -177,10 +172,10 @@ ggplot(tom2nd_filtered, aes(x=Age,
         panel.background = element_rect(fill="#FCEEE5"),
         plot.background = element_rect(fill="#FCEEE5"),
         legend.background = element_rect(fill="#FCEEE5"),
-        axis.text.x = element_text(color="black", size = 14),
-        axis.text.y = element_text(color="black", size = 16),
+        axis.text.x = element_text(color="black", size = 16),
+        axis.text.y = element_text(color="black", size = 14),
         axis.text = element_text(color="black"),
-        axis.title = element_text(color = "black", size = 16),
+        axis.title = element_text(color = "black", size = 18),
         legend.title = element_blank(),
         legend.text = element_text(color="black", size = 14))
 xlim(3.80, 10)

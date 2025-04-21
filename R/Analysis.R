@@ -5,6 +5,7 @@
 #Descriptive
 describe(tom$Age)
 table(tom$Gender)
+table(tom$grouping_new)
 
 ##Model building
 
@@ -12,6 +13,8 @@ table(tom$Gender)
 tom0 <- glm(ToM ~ 1, data= tom, family= "binomial")
 #First modell
 tom1 <- glm(ToM ~ Age, data= tom, family = "binomial")
+
+
 anova(tom0, tom1, test= "LRT")
 CIbinm2(tom1)
 summary(tom1)
@@ -32,6 +35,8 @@ anova(tom1.1_c, tom1.1.2, test= "LRT")
 ##Descriptive 
 describe(tom2nd_filtered$Age)
 table(tom2nd_filtered$Gender)
+table(tom2nd_filtered$grouping_new)
+
 
 ##Model building
 #Nullmodel
@@ -68,6 +73,12 @@ describe(appenreal$Age)
 
 table(appenreal$Gender)
 table(appenreal$grouping_new)
+
+
+
+
+
+
 
 ##Model building
 #nullmodel
@@ -206,13 +217,6 @@ anova(model_0_ac, model_ac, test="LRT")
 summary(model_ac)
 
 CIbinm2(model_ac)
-
-
-
-
-
-
-
 
 
 ######################################################################################
